@@ -1,9 +1,12 @@
+//可以使用 Proxy 去实现
+//但是由于Proxy的兼容性 所以暂时先不用Proxy实现
+
 /*
- * sender 需要监听属性的对象
- * key 监听对象的名称
- * val 赋值
- * customSetter setter钩子
- * shallow 无需深度	
+ * @param sender 需要监听属性的对象
+ * @param key 监听对象的名称
+ * @param val 赋值
+ * @param customSetter setter钩子
+ * @param shallow 无需深度	
  */
 export const defineReactive = function (sender = {},key = "",val = null,
 	customGetter = () => {},customSetter = () => {}
@@ -43,6 +46,19 @@ export const defineReactive = function (sender = {},key = "",val = null,
 			}
 
 		}
+	})
+}
+
+/*
+ * 映射代理
+ * @param sender 需要被映射到的对象
+ * @param source 需要被映射的对象
+ * @param key 映射属性的名称
+ */
+export const proxy = function (sender,source,key){
+	defineReactive(sender,key,undefined,() => source[key],(newVal,value,setter) => {
+		if(setter){ return }
+		source[key] = newVal
 	})
 }
 

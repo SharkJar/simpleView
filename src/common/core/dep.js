@@ -1,7 +1,7 @@
 let uid = 0
 let depTarget = null
 const targetStack = []
-//向队列中添加一条
+//向队列中添加一条 wather
 export const pushTarget = function (target){
 	if(depTarget){
 		targetStack.push(depTarget)
@@ -11,6 +11,11 @@ export const pushTarget = function (target){
 export const popTarget = function (){
 	depTarget = targetStack.pop()
 }
+
+/*
+ * 依赖队列
+ * 队列里都是watcher
+ */
 export default class Dep extends Set{
 	static get target(){ return depTarget }
 	static get pushTarget(){ return pushTarget }

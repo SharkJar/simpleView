@@ -1,12 +1,5 @@
 import { Observer,watcher } from '@/common/core'
-import { defineReactive } from '@/common/core/defineReactive'
-
-const proxy = function (sender,source,key){
-	defineReactive(sender,key,undefined,() => source[key],(newVal,value,setter) => {
-		if(setter){ return }
-		source[key] = newVal
-	})
-}
+import { defineReactive,proxy } from '@/common/core/defineReactive'
 
 //监听计算
 const initComputed = function (sender,computed){
@@ -15,14 +8,16 @@ const initComputed = function (sender,computed){
 		let val
 		let value = computed[key]
 		//监听依赖 有变化就改变缓存
-		let watch = new watcher(sender,value,(newVal,value) => (val = newVal))
+		//() => computed[key] 这部分不能直接返回value,这样他不会触发touch拿到依赖了
+		let watch = new watcher(sender,typeof value === "function"? value : () => computed[key],(newVal,value) => (val = newVal))
 		sender.__watcher__.add(watch)
 		defineReactive(sender,key,(val = watch.value),() => val)
 	})
 }
 //初始化data
-const initDat = function (sender,data){
+const initProxy = function (sender,data){
 	Object.keys(data).forEach(key => {
+		//映射
 		return proxy(sender,data,key)
 	})
 }
@@ -39,16 +34,21 @@ const initWatch = function (sender,data,watch){
 	})
 }
 
-
 export default class view{
 	constructor(options = {}){
 		options = this.$options = options || {}
-		let data = typeof options.data === "function"? options.data() : (options.data || {})
-		let computed = options.computed || {}
-		let watch = options.watch || {}
-		initDat(this,data)
+		let data = options.data = typeof options.data === "function"? options.data() : (options.data || {})
+		let methods = options.methods = typeof options.methods === "function"? options.methods() : (options.methods || {})
+		let computed = options.computed = typeof options.computed === "function"? options.computed() : (options.computed || {})
+		let watch = options.watch = typeof options.watch === "function"? options.watch() : (options.watch || {})
+		//映射data
+		initProxy(this,data)
+		//映射methods
+		initProxy(this,methods)
 		this.__ob__ = new Observer(data)
+		//初始化computed
 		initComputed(this,computed)
+		//初始化watch
 		initWatch(this,data,watch)
 		this.render = options.render || this.render
 		this.update = options.update || this.update
