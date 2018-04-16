@@ -1,5 +1,7 @@
 import { defineReactive } from '@/common/core/defineReactive'
 import Dep from '@/common/core/dep'
+//引入数组监听
+import '@/common/core/array'
 
 //添加属性
 const defineProp = function (sender = {},key = "",value = {},enumerable = false){
@@ -27,7 +29,6 @@ const reactive = function (sender = {},key = "",val = sender[key],shallow = fals
 		if(!childObs){ return }
 		//让当前的watcher对象添加dep
 		childObs.dep.depend()
-
 	}
 	//拦截器 不需要返回值
 	let setter = (newVal,value) => {

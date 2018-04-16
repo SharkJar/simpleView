@@ -39,6 +39,9 @@ export default class Watcher{
 		this.id = uid ++
 		this.activeState = true
 		this.getter = typeof keyOrFn === "function"? keyOrFn : (parsePath(keyOrFn) || function (){})
+		//异步
+		this.lazy = false
+		this.dirty = false
 		//深度依赖
 		this.deep = false
 		//是否同步
@@ -46,6 +49,7 @@ export default class Watcher{
 		if(options && typeof options === "object"){
 			this.deep = !!options.deep
 			this.sync = !!options.sync
+			this.lazy = !!options.lazy
 		}
 		//暂时不考虑clone的
 		this.deps = new Set()
@@ -104,12 +108,30 @@ export default class Watcher{
 
 	//开始触发更新
 	update(){
-		//同步
-		if(this.sync){
-			return this.run()
+		if(this.lazy){
+			this.dirty = true
 		}
-		//添加到队列
-		queueWatcher(this)
+		//同步
+		else if(this.sync){
+			this.run()
+		}else{
+			//添加到队列
+			queueWatcher(this)
+		}
+		
+	}
+
+	//懒依赖
+	//计算值
+	evaluate(){
+		this.value = this.get()
+		this.dirty = false
+	}
+
+	//在conputed里面使用到
+	//续集依赖关系
+	depend(){
+		this.deps.forEach(dep => dep.depend())
 	}
 
 	//运行

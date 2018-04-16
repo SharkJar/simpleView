@@ -42,7 +42,7 @@ export const defineReactive = function (sender = {},key = "",val = null,
 
 			//有setter就设置setter
 			if(setter){ 
-				sender.call(sender,val) 
+				setter.call(sender,val) 
 			}
 
 		}

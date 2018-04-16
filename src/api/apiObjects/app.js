@@ -6,7 +6,7 @@ export const instance = {
 	@methodFinishPublish('app_request')
 	@methodStartPublish('app_request')
 	request(apiConstant = {},requestData = {},otherOptions = {}){
-		console.log('app request',arguments)
+		console.log('app request',apiConstant,requestData,otherOptions)
 		return new Promise(res => res("返回一个结果"))
 	},
 

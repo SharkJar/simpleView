@@ -1,6 +1,7 @@
 
 import { Observer,watcher } from '@/common/core'
 import { defineReactive,proxy } from '@/common/core/defineReactive'
+import Dep from '@/common/core/dep'
 
 let instance = null
 export default class store{
@@ -18,6 +19,34 @@ export default class store{
 
 //初始化getter
 const initGetter = function (getters){
+	// instance.getters = {}
+
+	// Object.keys(getters).forEach(key => {
+	// 	let value = getters[key]
+
+	// 	//监听依赖 有变化就改变缓存
+	// 	//() => computed[key] 这部分不能直接返回value,这样他不会触发touch拿到依赖了
+	// 	let watch = new watcher(instance.state,() => {
+	// 		return typeof value === "function"? value : () => computed[key]
+	// 	},undefined,{ lazy:true,deep:true })
+
+	// 	defineReactive(instance.getters,key,watch.value, () => {
+	// 		//懒加载
+	// 		//当为true的时候 值有变化 需要拿到新值
+	// 		if(watch.dirty){
+	// 			//拿到最新的值
+	// 			watch.evaluate()
+	// 		}
+	// 		//让下一级拿到依赖关系
+	// 		//否则下一级没有依赖关系 就不会触发change
+	// 		if(Dep.target){
+	// 			//添加依赖
+	// 			watch.depend()
+	// 		}
+	// 		return watch.value
+	// 	})
+	// })
+
 	instance.getters = {}
 	Object.keys(getters).forEach(key => {
 		//缓存的值

@@ -53,5 +53,3 @@ switch(String(serverEnv).toUpperCase()){
 export default {
 	appUrl,mmsUrl,loanNavigationUrl,ubasUrl
 }
-
-
