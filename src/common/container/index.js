@@ -10,8 +10,8 @@ export const container = class extends Map{
 	}
 
 	initializeChain(sender){
-		sender && typeof sender.initialize === "function" && sender.initialize(this)
-		return sender
+		return sender && typeof sender.initialize === "function" && sender.initialize(this) || sender
+		//return sender
 	}
 }
 
