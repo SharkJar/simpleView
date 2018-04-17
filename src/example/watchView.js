@@ -17,10 +17,10 @@ let view = new simpleVue({
 
 	watch:{
 		numA(){
-			console.log(this.numA,'watch numA')
+			console.log(this.numA,'watch numA',arguments)
 		},
 		sum(){
-			console.log(this.sum,'watch sum')
+			console.log(this.sum,'watch sum',arguments)
 		}
 	}
 })

@@ -1,4 +1,4 @@
-import store,{ mapStates,mapGetters } from '@/common/states/store' 
+import { store,mapStates,mapGetters,mapActions } from '@/common/states' 
 import simpleVue from '@/common/view'
 
 let story = new store({
@@ -8,10 +8,22 @@ let story = new store({
 	},
 	getters:{
 		getA(state){
-			return state.c
+			return state.b
+		}
+	},
+	actions:{
+		requestApi({ getters,state,commit }){
+			commit('updateState',{ b:3,c:555 })
+		}
+	},
+	mutations:{
+		updateState(state,{ b,c }){
+			state.b = b
+			state.c = c
 		}
 	}
 })
+
 
 let view = new simpleVue({
 	data:{
@@ -28,15 +40,19 @@ let view = new simpleVue({
 		}
 	},
 
-	render(){
-		console.log(this.b,this.getA,'render')
+	methods:{
+		...mapActions('requestApi')
+	},
 
-		console.log(story.state.b,'story.state.b')
+	render(){
+		console.log(story.state.b,this.requestApi(),666)
+
+		//console.log(story.state.b,'story.state.b')
 	}
 })
 
-setTimeout(function (){
-	view.b = 3333
-},3000)
+// setTimeout(function (){
+// 	story.state.b = 3333
+// },3000)
 
 

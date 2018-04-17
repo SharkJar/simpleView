@@ -1,0 +1,1 @@
+export { default as store,mapStates,mapGetters,mapActions,mapMutations } from '@/common/states/store'

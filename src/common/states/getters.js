@@ -6,9 +6,9 @@ import Dep from '@/common/core/dep'
 
 export default {
 	initialize(){
-		let state = store.content.get('state')
-		let { getters = {} } = store.content.get('options')
-		let result = {}
+		const state = store.content.get('state')
+		const { getters = {} } = store.content.get('options')
+		const result = {}
 		initGetter(getters,state,result)
 		return result
 	}
@@ -18,10 +18,10 @@ export default {
 //初始化getter
 const initGetter = function (getters,instanceState,instanceGetters){
 	Object.keys(getters).forEach(key => {
-		let value = getters[key]
+		const value = getters[key]
 		//监听依赖 有变化就改变缓存
 		//() => computed[key] 这部分不能直接返回value,这样他不会触发touch拿到依赖了
-		let watch = new watcher(instanceState,
+		const watch = new watcher(instanceState,
 			() =>  typeof value === "function"? value(instanceState) : getters[key],undefined,
 			{ lazy:true,deep:true })
 
@@ -39,17 +39,17 @@ const initGetter = function (getters,instanceState,instanceGetters){
 
 //映射getter
 export const mapGetters = function (mapping){
-	let propsMap = getMapping(mapping)
-	let { state } = store.content.get('instance')
-	let { getters = {} } = store.content.get('options')
-	let result = {}
+	const propsMap = getMapping(mapping)
+	const { state } = store.instance
+	const { getters = {} } = store.content.get('options')
+	const result = {}
 
 	propsMap.forEach( 
 		(mapKey,key) => {
-			let value = getters[key]
+			const value = getters[key]
 			//监听依赖 有变化就改变缓存
 			//() => computed[key] 这部分不能直接返回value,这样他不会触发touch拿到依赖了
-			let watch = new watcher(state,
+			const watch = new watcher(state,
 				() =>  typeof value === "function"? value(state) : getters[key],undefined,
 				{ lazy:true,deep:true })
 

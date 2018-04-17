@@ -5,7 +5,7 @@ import { getMapping } from '@/common/states/utils'
 
 export default {
 	initialize(){
-		let { state = {} } = (store.content.get('options') || {})
+		const { state = {} } = (store.content.get('options') || {})
 		state.__ob__ = new Observer( state )
 		return state
 	}
@@ -14,9 +14,9 @@ export default {
 
 //映射state
 export const mapStates = function (mapping){
-	let propsMap = getMapping(mapping)
-	let { state } = store.content.get('instance')
-	let result = {}
+	const propsMap = getMapping(mapping)
+	const { state } = store.instance
+	const result = {}
 
 	propsMap.forEach( 
 		(mapKey,sourceKey) => {
